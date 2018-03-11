@@ -1,0 +1,639 @@
+class Headline extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1 className='text-center display-3' id='headline-box'>Tic Tac Toe</h1>
+      </div>
+    );
+  }
+}
+
+class ButtonsXO extends React.Component {
+  render() {
+    return (
+      <div className='text-center' id='choice-box'>
+        <button className='btn btn-lg btn-outline-info' id='buttonX'>X</button>
+        <button className='btn btn-lg btn-outline-info' id='buttonO'>O</button>
+      </div>
+    );
+  }
+}
+
+class Row1 extends React.Component {
+  render() {
+    return (
+      <div className='row text-center'>
+
+        <div className='col'>
+          <button className="btn btn-lg btn-outline-primary buttonXO" id="one">
+            <p></p>
+          </button>
+          <button className="btn btn-lg btn-outline-primary buttonXO" id="two">
+            <p></p>
+          </button>
+          <button className="btn btn-lg btn-outline-primary buttonXO" id="three">
+            <p></p>
+          </button>
+        </div>
+
+      </div>
+    );
+  }
+}
+
+class Row2 extends React.Component {
+  render() {
+    return (
+      <div className='row text-center'>
+        <div className='col'>
+          <button className="btn btn-lg btn-outline-primary buttonXO" id="four">
+            <p></p>
+          </button>
+          <button className="btn btn-lg btn-outline-primary buttonXO" id="five">
+            <p></p>
+          </button>
+          <button className="btn btn-lg btn-outline-primary buttonXO" id="six">
+            <p></p>
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
+
+class Row3 extends React.Component {
+  render() {
+    return (
+      <div className='row text-center' id='row-3-box'>
+        <div className='col'>
+          <button className="btn btn-lg btn-outline-primary buttonXO" id="seven">
+            <p></p>
+          </button>
+          <button className="btn btn-lg btn-outline-primary buttonXO" id="eight">
+            <p></p>
+          </button>
+          <button className="btn btn-lg btn-outline-primary buttonXO" id="nine">
+            <p></p>
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
+
+class App extends React.Component {
+  render() {
+    return (
+      <div className='container jumbotron'>
+        <Headline />
+        <ButtonsXO />
+        <Row1 />
+        <Row2 />
+        <Row3 />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+);
+
+
+
+$(document).ready(function() {
+  var playerChoice;
+  var robotChoice;
+  var chosen = false;
+
+  // Each represents a block where x or o is placed
+  var one = {
+    id: "#one",
+    robotCount: 0,    
+    playerCount: 0,
+    player: false,
+    robot: false
+  };
+
+  var two = {
+    id: "#two",
+    robotCount: 0,    
+    playerCount: 0,
+    player: false,
+    robot: false
+  };
+
+  var three = {
+    id: "#three",
+    robotCount: 0,    
+    playerCount: 0,
+    player: false,
+    robot: false
+  };
+
+  var four = {
+    id: "#four",
+    robotCount: 0,    
+    playerCount: 0,
+    player: false,
+    robot: false
+  };
+
+  var five = {
+    id: "#five",
+    robotCount: 0,    
+    playerCount: 0,
+    player: false,
+    robot: false
+  };
+
+  var six = {
+    id: "#six",
+    robotCount: 0,    
+    playerCount: 0,
+    player: false,
+    robot: false
+  };
+
+  var seven = {
+    id: "#seven",
+    robotCount: 0,    
+    playerCount: 0,
+    player: false,
+    robot: false
+  };
+
+  var eight = {
+    id: "#eight",
+    robotCount: 0,    
+    playerCount: 0,
+    player: false,
+    robot: false
+  };
+
+  var nine = {
+    id: "nine",
+    robotCount: 0,    
+    playerCount: 0,
+    player: false,
+    robot: false
+  };
+
+  // Array to hold each box for looking through
+  var boxes = [one, two, three, four, five, six, seven, eight, nine];
+
+  // AI
+  function robotPlayer() {
+    var robotChosen = boxes.find(function(x) {
+      if (x.robot == false && x.player == false) {
+        x.robot = true;
+        x.robotCount = 1;
+        return x;
+      }
+    });
+
+    $(robotChosen.id).text(robotChoice);
+  }
+
+  // Resets the game
+  function resetGame() {
+    boxes.forEach(function(x) {
+      x.playerCount = 0;
+      x.robotCount = 0;
+      x.player = false;
+      x.robot = false;
+    });
+  }
+
+  // Choose X or O
+  $("#buttonX").click(function() {
+    playerChoice = "X";
+    robotChoice = "O";
+    chosen = true;
+    $("#buttonO").hide();
+    $("#buttonX").hide();
+  });
+
+  $("#buttonO").click(function() {
+    playerChoice = "O";
+    robotChoice = "X";
+    chosen = true;    
+    $("#buttonX").hide();
+    $("#buttonO").hide();
+  });
+
+  /* First Row */
+
+  // When you click #One
+  $("#one").click(function() {
+    // Checks if a box is x or o already before placing either one there
+    if (one.player == false && one.robot == false && chosen == true) {
+      one.playerCount = 1;
+      one.player = true;
+      $(this).text(playerChoice);
+
+      robotPlayer()
+
+    }
+
+    // Checks if player or ai connected 3 x's or o's together, then resets game
+    if (one.playerCount + two.playerCount + three.playerCount === 3 ||
+        one.robotCount + two.robotCount + three.robotCount === 3 ) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+      $("#buttonX").show();
+      $("#buttonO").show();
+    }
+    if (one.playerCount + four.playerCount + seven.playerCount === 3 ||
+        one.robotCount + four.robotCount + seven.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;      
+      resetGame()
+      $("#buttonX").show();
+      $("#buttonO").show();
+    }
+    if (one.playerCount + five.playerCount + nine.playerCount === 3 ||
+        one.robotCount + five.robotCount + nine.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;      
+      boxes.forEach(function(x) {
+        x.playerCount = 0;
+        x.player = false;
+        x.robot = false;
+      });
+      $("#buttonX").show();
+      $("#buttonO").show();
+    }
+  });
+
+  // When you click #Two
+  $("#two").click(function() {
+    if (two.player == false && two.robot == false && chosen == true) {
+      two.playerCount = 1;
+      two.player = true;
+      $(this).text(playerChoice);
+
+      robotPlayer()
+    }
+
+    if (one.playerCount + two.playerCount + three.playerCount === 3 ||
+        one.robotCount + two.robotCount + three.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+      $("#buttonX").show();
+      $("#buttonO").show();
+    }
+    if (two.playerCount + five.playerCount + eight.playerCount === 3 ||
+        two.robotCount + five.robotCount + eight.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+      $("#buttonX").show();
+      $("#buttonO").show();
+    }
+  });
+
+  // When you click #Three
+  $("#three").click(function() {
+    if (three.player == false && three.robot == false && chosen == true) {
+      three.playerCount = 1;
+      three.player = true;
+      $(this).text(playerChoice);
+
+      robotPlayer()
+    }
+
+    if (one.playerCount + two.playerCount + three.playerCount === 3 ||
+        one.robotCount + two.robotCount + three.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+      $("#buttonX").show();
+      $("#buttonO").show();
+    }
+    if (nine.playerCount + six.playerCount + three.playerCount === 3 ||
+        nine.robotCount + six.robotCount + three.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+      $("#buttonX").show();
+      $("#buttonO").show();
+    }
+    if (seven.playerCount + five.playerCount + three.playerCount === 3 ||
+        seven.robotCount + five.robotCount + three.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+      $("#buttonX").show();
+      $("#buttonO").show();
+    }
+  });
+
+  // Second Row
+
+  // When you click #Four
+  $("#four").click(function() {
+    if (four.player == false && four.robot == false && chosen == true) {
+      four.playerCount = 1;
+      four.player = true;
+      $(this).text(playerChoice);
+
+      robotPlayer()      
+    }
+
+    if (one.playerCount + four.playerCount + seven.playerCount === 3 || 
+        one.robotCount + four.robotCount + seven.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+    if (four.playerCount + five.playerCount + six.playerCount === 3 || 
+        four.robotCount + five.robotCount + six.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+  });
+
+  // When you click #Five
+  $("#five").click(function() {
+    if (five.player == false && five.robot == false && chosen == true) {
+      five.playerCount = 1;
+      five.player = true;
+      $(this).text(playerChoice);
+
+      robotPlayer()      
+    }
+
+    if (two.playerCount + five.playerCount + eight.playerCount === 3 ||
+        two.robotCount + five.robotCount + eight.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+    if (four.playerCount + five.playerCount + six.playerCount === 3 ||
+        four.robotCount + five.robotCount + six.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+    if (one.playerCount + five.playerCount + nine.playerCount === 3 ||
+        one.robotCount + five.robotCount + nine.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+    if (three.playerCount + five.playerCount + seven.playerCount === 3 ||
+        three.robotCount + five.robotCount + seven.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+  });
+
+  // When you click #Six
+  $("#six").click(function() {
+    if (six.player == false && six.robot == false && chosen == true) {
+      six.playerCount = 1;
+      six.player = true;
+      $(this).text(playerChoice);
+
+      robotPlayer()
+    }
+
+    if (four.playerCount + five.playerCount + six.playerCount === 3 ||
+        four.robotCount + five.robotCount + six.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+    if (nine.playerCount + six.playerCount + three.playerCount === 3 ||
+        nine.robotCount + six.robotCount + three.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+  });
+
+  // Third Row
+
+  // When you click #Seven
+  $("#seven").click(function() {
+    if (seven.player == false && seven.robot == false && chosen == true) {
+      seven.playerCount = 1;
+      seven.player = true;
+      $(this).text(playerChoice);
+
+      robotPlayer()      
+    }
+
+    if (one.playerCount + four.playerCount + seven.playerCount === 3 ||
+        one.robotCount + four.robotCount + seven.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+    if (seven.playerCount + five.playerCount + three.playerCount === 3 ||
+        seven.robotCount + five.robotCount + three.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+    if (seven.playerCount + eight.playerCount + nine.playerCount === 3 ||
+        seven.robotCount + eight.robotCount + nine.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+  });
+
+  // When you click #Eight
+  $("#eight").click(function() {
+    if (eight.player == false && eight.robot == false && chosen == true) {
+      eight.playerCount = 1;
+      eight.player = true;
+      $(this).text(playerChoice);
+
+      robotPlayer()
+    }
+
+    if (two.playerCount + five.playerCount + eight.playerCount === 3 ||
+        two.robotCount + five.robotCount + eight.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+    if (seven.playerCount + eight.playerCount + nine.playerCount === 3 ||
+        seven.robotCount + eight.robotCount + nine.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+  });
+
+  // When you click #Nine
+  $("#nine").click(function() {
+    if (nine.player == false && nine.robot == false && chosen == true) {
+      nine.playerCount = 1;
+      nine.player = true;
+      $(this).text(playerChoice);
+
+      robotPlayer()
+    }
+
+    if (one.playerCount + five.playerCount + nine.playerCount === 3 ||
+        one.robotCount + five.robotCount + nine.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+    if (seven.playerCount + eight.playerCount + nine.playerCount === 3 ||
+        seven.robotCount + eight.robotCount + nine.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+    if (nine.playerCount + six.playerCount + three.playerCount === 3 ||
+        nine.robotCount + six.robotCount + three.robotCount === 3) {
+      $("#one, #two, #three, #four, #five, #six, #seven, #eight, #nine").text(
+        ""
+      );
+      $("#buttonX").show();
+      $("#buttonO").show();
+      playerChoice = "";
+      robotChoice = "";
+      chosen = false;
+      resetGame()
+    }
+  });
+
+
+
+
+}); // End
+
